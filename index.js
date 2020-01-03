@@ -45,20 +45,27 @@ client.on('messageReactionAdd', reaction => {
     && message.guild.id === '160072797475962881' // change to thaButtCrew
     && isMod(message.guild, users)
     && !hasHouse(message.member))
-        if(HP_EMOTE_ID_TO_ROLES.hasOwnProperty(emoji.id)){
-            console.log(`Would add to role ${HP_EMOTE_ID_TO_ROLES[emoji.id].name}`)
-            // add roles here
-            /*
-            message.member.addRole(HP_EMOTE_ID_TO_ROLES[emoji.id].role_id)
-            .then(res => {
-                console.log(`${message.member.displayName} has been added to ${HP_EMOTE_ID_TO_ROLES[emoji.id].name}.`)
-                //message.reply(`${HP_EMOTE_ID_TO_ROLES[emoji.id].name.toUpperCase()}!!!`)
-            }).catch(err => {
-                console.log(`Error Giving Role: ${err}`)
-            })
-            */
-           
+        if(!hasHouse(message.member)){
+            if(HP_EMOTE_ID_TO_ROLES.hasOwnProperty(emoji.id)){
+                console.log(`Would add to role ${HP_EMOTE_ID_TO_ROLES[emoji.id].name}`)
+                // add roles here
+                /*
+                message.member.addRole(HP_EMOTE_ID_TO_ROLES[emoji.id].role_id)
+                .then(res => {
+                    console.log(`${message.member.displayName} has been added to ${HP_EMOTE_ID_TO_ROLES[emoji.id].name}.`)
+                    //message.reply(`${HP_EMOTE_ID_TO_ROLES[emoji.id].name.toUpperCase()}!!!`)
+                }).catch(err => {
+                    console.log(`Error Giving Role: ${err}`)
+                })
+                */
+               
+            }
+        }else{
+            console.log(`Emote ID: ${emoji.id}`)
+            console.log(`Emote Name: ${emoji.name}`)
+            console.log('will remove the house role from the person')
         }
+        
 })
 
 const HP_EMOTE_ID_TO_ROLES = { // change to HP emotes and roles
