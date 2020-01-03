@@ -32,6 +32,7 @@ client.login(TOKEN);
 
 
 client.on('message', message => {
+    console.log(message.channel.id)
 	if (message.content === '!ping') {
         // send back "Pong." to the channel the message was sent in
         //message.channel.send('Pong.');
@@ -40,13 +41,14 @@ client.on('message', message => {
 
 client.on('messageReactionAdd', reaction => {
     const {message, users, emoji} = reaction
-    if(message.channel.id === '441697630959960087' // change to #sorting_hat
-    && message.guild.id === '137074521940164608' // change to thaButtCrew
+    if(message.channel.id === '662128396599558175' // change to #sorting_hat
+    && message.guild.id === '160072797475962881' // change to thaButtCrew
     && isMod(message.guild, users)
     && !hasHouse(message.member))
         if(HP_EMOTE_ID_TO_ROLES.hasOwnProperty(emoji.id)){
+            console.log(`Would add to role ${HP_EMOTE_ID_TO_ROLES[emoji.id].name}`)
             // add roles here
-            
+            /*
             message.member.addRole(HP_EMOTE_ID_TO_ROLES[emoji.id].role_id)
             .then(res => {
                 console.log(`${message.member.displayName} has been added to ${HP_EMOTE_ID_TO_ROLES[emoji.id].name}.`)
@@ -54,25 +56,41 @@ client.on('messageReactionAdd', reaction => {
             }).catch(err => {
                 console.log(`Error Giving Role: ${err}`)
             })
-            
+            */
            
         }
 })
 
 const HP_EMOTE_ID_TO_ROLES = { // change to HP emotes and roles
-    '472227723675303946':{
-        name:'tester role',
-        role_id:'662535463038484521'
+    '530429682839978018':{
+        name:'Gryffindor',
+        role_id:'528264636894806027'
+    },
+    '530429751442145300':{
+        name:'Slytherin',
+        role_id:'528264234233233409'
+    },
+    '530429771067424800':{
+        name:'Ravenclaw',
+        role_id:'528263676721889291'
+    },
+    '530429786431029250':{
+        name:'Hufflepuff',
+        role_id:'528264390080987146'
     }
 }
 
-const HP_ROLE_IDS = ['662535463038484521'] // change to just HP role id's
+const HP_ROLE_IDS = [
+    '528263676721889291',
+    '528264234233233409',
+    '528264390080987146',
+    '528264636894806027'] // change to just HP role id's
 
 let isMod = (guild, users) => {
     let result = false
 
     guild.roles.forEach(role => {
-        if(role.id === '182674836143734786'){ // change to mod or god id
+        if(role.id === '264164239797649408' || role.id === '264165174414540810'){ // change to mod or god id
             role.members.forEach(member => {
                 users.forEach(user => {
                     if(member.id === user.id){
@@ -91,7 +109,7 @@ let hasHouse = (member) => {
 
     member.roles.forEach(role => {
         if(HP_ROLE_IDS.includes(role.id)){
-            result = true
+            result = true 
             console.log(`${member.displayName} already has a role`)
         }
     })
