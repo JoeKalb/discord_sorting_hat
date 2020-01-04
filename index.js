@@ -11,6 +11,8 @@ const permissions = process.env.PERMISSIONS
 const TOKEN = process.env.TOKEN
 client.once('ready', () => {
     console.log('Ready!');
+
+    /*
     client.guilds.forEach(guild => {
         console.log(`${guild.name} guild id: ${guild.id}`)
         console.log(`${guild.name} roles:`)
@@ -32,6 +34,7 @@ client.once('ready', () => {
             console.log(`\t${emoji.name}\t${emoji.id}`)
         }))
     })
+    */
 });
 
 client.login(TOKEN);
@@ -51,12 +54,9 @@ client.on('messageReactionAdd', reaction => {
     && isMod(message.guild, users)){
         if(!hasHouse(message.member)){
             if(HP_EMOTE_ID_TO_ROLES.hasOwnProperty(emoji.id)){
-                console.log(`Would add to role ${HP_EMOTE_ID_TO_ROLES[emoji.id].name}`)
-                // add roles here
                 
                 message.member.addRole(HP_EMOTE_ID_TO_ROLES[emoji.id].role_id)
                 .then(res => {
-                    console.log(`${message.member.displayName} has been added to ${HP_EMOTE_ID_TO_ROLES[emoji.id].name}.`)
                     message.reply(`${HP_EMOTE_ID_TO_ROLES[emoji.id].name.toUpperCase()}!!!`)
                 }).catch(err => {
                     console.log(`Error Giving Role: ${err}`)
@@ -64,9 +64,6 @@ client.on('messageReactionAdd', reaction => {
             }
         }else{
             if('356889743239413763' === emoji.id && isJoeFish(users)){
-                console.log(`Emote ID: ${emoji.id}`)
-                console.log(`Emote Name: ${emoji.name}`)
-                console.log('will remove the house role from the person')
                 let current_house_id;
                 message.member.roles.forEach(role => {
                     if(HP_ROLE_IDS.includes(role.id)){
@@ -128,8 +125,7 @@ let hasHouse = (member) => {
 
     member.roles.forEach(role => {
         if(HP_ROLE_IDS.includes(role.id)){
-            result = true 
-            console.log(`${member.displayName} already has a role`)
+            result = true
         }
     })
 
