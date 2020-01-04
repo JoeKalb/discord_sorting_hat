@@ -44,7 +44,7 @@ client.on('message', message => {
     console.log(message.content)
 	if (message.content === '!ping') {
         // send back "Pong." to the channel the message was sent in
-        //message.channel.send('Pong.');
+        message.channel.send('Pong.');
     }
 });
 
@@ -143,3 +143,11 @@ let isJoeFish = (users) => {
 
     return result
 }
+
+const express = require('express')
+const app = express()
+const port = process.env.PORT || 3000
+
+app.get('/', (req, res) => res.redirect(URL))
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
