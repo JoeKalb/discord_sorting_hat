@@ -151,3 +151,7 @@ const port = process.env.PORT || 3000
 app.get('/', (req, res) => res.redirect(URL))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
+setInterval(() => {
+    console.log(`This should get off every 29 minutes! ${Date.now()}`)
+}, 1740000)
