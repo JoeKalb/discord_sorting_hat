@@ -68,12 +68,21 @@ client.on('message', async message => {
 
 client.on('guildMemberAdd', member => {
 
-    if(member.guild.id === '137074521940164608'){
-        const { id } = member
+    if(member.guild.id === '137074521940164608'){ // temp sub nights
+        const { id } = message.member
 
         let buttMemberRoles = isInButtCrew(id)
         if(buttMemberRoles.length){
             console.log(buttMemberRoles)
+            if(buttMemberRoles.includes('311705462754246656') || buttMemberRoles.includes('689249934742126610')){ // Twitch Subscriber || SD: Tier 1 Sub
+                member.addRole('708361296541777951') // T1 Butt Sub
+            }
+            if(buttMemberRoles.includes('689249934742126715')){ // HG: Tier 2 Sub
+                member.addRole('708361402229719079') // T2 Butt Sub
+            }
+            if(buttMemberRoles.includes('689249934742126763') || buttMemberRoles.includes('278298980134420480') || buttMemberRoles.includes('278299105468350464')){
+                member.addRole('708361495209181195') //T3++ Butt Sub
+            }
         }
     }
 });
