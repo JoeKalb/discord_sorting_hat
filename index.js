@@ -12,39 +12,69 @@ const TOKEN = process.env.TOKEN
 client.once('ready', () => {
     console.log('Ready!');
 
-    /*
+    
     client.guilds.forEach(guild => {
         console.log(`${guild.name} guild id: ${guild.id}`)
         console.log(`${guild.name} roles:`)
         console.log(guild.roles.forEach(role => {
             console.log(`\t${role.name}\t${role.id}`)
 
-            if(role.id === '264164239797649408'){
+            /* if(role.id === '264164239797649408'){
                 role.members.forEach(member => {
                     console.log(`${member.displayName}: ${member.id}`)
                 })
-            }
+            } */
         }))
-        console.log(`${guild.name} channels:`)
+        /* console.log(`${guild.name} channels:`)
         console.log(guild.channels.forEach(channel => {
             console.log(`\t${channel.name}\t${channel.id}`)
         }))
         console.log(`${guild.name} emojis:`)
         console.log(guild.emojis.forEach(emoji => {
             console.log(`\t${emoji.name}\t${emoji.id}`)
-        }))
+        })) */
     })
-    */
+    
 });
 
 client.login(TOKEN);
 
 
-client.on('message', message => {
+client.on('message', async message => {
     console.log(message.content)
 	if (message.content === '!ping') {
         // send back "Pong." to the channel the message was sent in
         message.channel.send('Pong.');
+    }
+
+    if(message.member.guild.id === '137074521940164608'){ // temp sub nights
+        const { id } = message.member
+
+        let buttMemberRoles = isInButtCrew(id)
+        if(buttMemberRoles.length){
+            console.log(buttMemberRoles)
+            if(buttMemberRoles.includes('311705462754246656') || buttMemberRoles.includes('689249934742126610')){ // Twitch Subscriber || SD: Tier 1 Sub
+                message.member.addRole('708361296541777951') // T1 Butt Sub
+            }
+            if(buttMemberRoles.includes('689249934742126715')){ // HG: Tier 2 Sub
+                message.member.addRole('708361402229719079') // T2 Butt Sub
+            }
+            if(buttMemberRoles.includes('689249934742126763') || buttMemberRoles.includes('278298980134420480') || buttMemberRoles.includes('278299105468350464')){
+                message.member.addRole('708361495209181195') //T3++ Butt Sub
+            }
+        }
+    }
+});
+
+client.on('guildMemberAdd', member => {
+
+    if(member.guild.id === '137074521940164608'){
+        const { id } = member
+
+        let buttMemberRoles = isInButtCrew(id)
+        if(buttMemberRoles.length){
+            console.log(buttMemberRoles)
+        }
     }
 });
 
@@ -102,6 +132,24 @@ const HP_ROLE_IDS = [
     '528264234233233409',
     '528264390080987146',
     '528264636894806027'] // change to just HP role id's
+
+let isInButtCrew = (id) => {
+    let roleIDs = []
+    client.guilds.forEach(guild => {
+        if(guild.id === '160072797475962881'){
+            guild.members.forEach(member => {
+                if(member.id === id){
+                    console.log('found')
+                    member.roles.forEach(role => {
+                        console.log(`${role.name}: ${role.id}`)
+                        roleIDs = [...roleIDs, role.id]
+                    })
+                }
+            })
+        }
+    })
+    return roleIDs
+}
 
 let isMod = (guild, users) => {
     let result = false
