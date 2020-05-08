@@ -62,6 +62,9 @@ client.on('message', async message => {
             if(buttMemberRoles.includes('689249934742126763') || buttMemberRoles.includes('278298980134420480') || buttMemberRoles.includes('278299105468350464')){
                 message.member.addRole('708361495209181195') //T3++ Butt Sub
             }
+            if(buttMemberRoles.includes('264165174414540810') || buttMemberRoles.includes('264164239797649408')){ // God || Professors
+                message.member.addRole('708395235134144524') // Essential Employees
+            }
         }
     }
 });
@@ -82,6 +85,9 @@ client.on('guildMemberAdd', member => {
             }
             if(buttMemberRoles.includes('689249934742126763') || buttMemberRoles.includes('278298980134420480') || buttMemberRoles.includes('278299105468350464')){
                 member.addRole('708361495209181195') //T3++ Butt Sub
+            }
+            if(buttMemberRoles.includes('264165174414540810') || buttMemberRoles.includes('264164239797649408')){ // God || Professors
+                member.addRole('708395235134144524') // Essential Employees
             }
         }
     }
