@@ -72,7 +72,7 @@ client.on('message', async message => {
 client.on('guildMemberAdd', member => {
 
     if(member.guild.id === '137074521940164608'){ // temp sub nights
-        const { id } = message.member
+        const { id } = member
 
         let buttMemberRoles = isInButtCrew(id)
         if(buttMemberRoles.length){
