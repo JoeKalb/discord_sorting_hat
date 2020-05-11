@@ -13,27 +13,27 @@ client.once('ready', () => {
     console.log('Ready!');
 
     
-    client.guilds.forEach(guild => {
-        console.log(`${guild.name} guild id: ${guild.id}`)
-        console.log(`${guild.name} roles:`)
-        console.log(guild.roles.forEach(role => {
-            console.log(`\t${role.name}\t${role.id}`)
+    // client.guilds.forEach(guild => {
+    //     console.log(`${guild.name} guild id: ${guild.id}`)
+    //     console.log(`${guild.name} roles:`)
+    //     console.log(guild.roles.forEach(role => {
+    //         console.log(`\t${role.name}\t${role.id}`)
 
-            /* if(role.id === '264164239797649408'){
-                role.members.forEach(member => {
-                    console.log(`${member.displayName}: ${member.id}`)
-                })
-            } */
-        }))
-        /* console.log(`${guild.name} channels:`)
-        console.log(guild.channels.forEach(channel => {
-            console.log(`\t${channel.name}\t${channel.id}`)
-        }))
-        console.log(`${guild.name} emojis:`)
-        console.log(guild.emojis.forEach(emoji => {
-            console.log(`\t${emoji.name}\t${emoji.id}`)
-        })) */
-    })
+    //         /* if(role.id === '264164239797649408'){
+    //             role.members.forEach(member => {
+    //                 console.log(`${member.displayName}: ${member.id}`)
+    //             })
+    //         } */
+    //     }))
+    //     /* console.log(`${guild.name} channels:`)
+    //     console.log(guild.channels.forEach(channel => {
+    //         console.log(`\t${channel.name}\t${channel.id}`)
+    //     }))
+    //     console.log(`${guild.name} emojis:`)
+    //     console.log(guild.emojis.forEach(emoji => {
+    //         console.log(`\t${emoji.name}\t${emoji.id}`)
+    //     })) */
+    // })
     
 });
 
@@ -41,33 +41,47 @@ client.login(TOKEN);
 
 
 client.on('message', async message => {
-    console.log(message.content)
+    //console.log(message)
 	if (message.content === '!ping') {
         // send back "Pong." to the channel the message was sent in
         message.channel.send('Pong.');
+    }else if(message.author.id === '91370189366530048' && message.content === '!updateRoles'){
+        updateRoles()
+        message.channel.send('Roles Updated!')
     }
 
-    if(message.member.guild.id === '137074521940164608'){ // temp sub nights
-        const { id } = message.member
-
-        let buttMemberRoles = isInButtCrew(id)
-        if(buttMemberRoles.length){
-            console.log(buttMemberRoles)
-            if(buttMemberRoles.includes('311705462754246656') || buttMemberRoles.includes('689249934742126610')){ // Twitch Subscriber || SD: Tier 1 Sub
-                message.member.addRole('708361296541777951') // T1 Butt Sub
-            }
-            if(buttMemberRoles.includes('689249934742126715')){ // HG: Tier 2 Sub
-                message.member.addRole('708361402229719079') // T2 Butt Sub
-            }
-            if(buttMemberRoles.includes('689249934742126763') || buttMemberRoles.includes('278298980134420480') || buttMemberRoles.includes('278299105468350464')){
-                message.member.addRole('708361495209181195') //T3++ Butt Sub
-            }
-            if(buttMemberRoles.includes('264165174414540810') || buttMemberRoles.includes('264164239797649408')){ // God || Professors
-                message.member.addRole('708395235134144524') // Essential Employees
+    try{
+        if(message.channel.type !== 'dm' && message.member.guild.id === '137074521940164608'){ // temp sub nights
+            const { id } = message.member
+    
+            let buttMemberRoles = isInButtCrew(id)
+            if(buttMemberRoles.length){
+                console.log(buttMemberRoles)
+                if(buttMemberRoles.includes('311705462754246656') || buttMemberRoles.includes('689249934742126610')){ // Twitch Subscriber || SD: Tier 1 Sub
+                    message.member.addRole('708361296541777951') // T1 Butt Sub
+                }
+                if(buttMemberRoles.includes('689249934742126715')){ // HG: Tier 2 Sub
+                    message.member.addRole('708361402229719079') // T2 Butt Sub
+                }
+                if(buttMemberRoles.includes('689249934742126763') || buttMemberRoles.includes('278298980134420480') || buttMemberRoles.includes('278299105468350464')){
+                    message.member.addRole('708361495209181195') //T3++ Butt Sub
+                }
+                if(buttMemberRoles.includes('264165174414540810') || buttMemberRoles.includes('264164239797649408')){ // God || Professors
+                    message.member.addRole('708395235134144524') // Essential Employees
+                }
             }
         }
     }
+    catch(err)
+    {console.log(err)}
+    
 });
+let updateRoles = () => {
+    let tempServer = client.guilds.get('137074521940164608')
+    let buttCrewServer = client.guilds.get('160072797475962881')
+
+    
+}
 
 client.on('guildMemberAdd', member => {
 
