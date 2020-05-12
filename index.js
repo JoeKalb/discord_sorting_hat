@@ -80,7 +80,39 @@ let updateRoles = () => {
     let tempServer = client.guilds.get('137074521940164608')
     let buttCrewServer = client.guilds.get('160072797475962881')
 
-    
+    tempServer.members.forEach(member => {
+        let buttCrewMember = buttCrewServer.members.get(member.id)
+
+        if(buttCrewMember){
+            // remove roles
+            if(member.roles.includes('708361296541777951')){ //T1
+                if(!(buttCrewMember.roles.includes('311705462754246656') || buttCrewMember.roles.includes('689249934742126610'))){
+                    member.removeRole('708361296541777951')
+                }
+            }
+            if(member.roles.includes('708361402229719079')){ //T2
+                if(!buttCrewMember.roles.includes('689249934742126715')){
+                    member.removeRole('708361402229719079')
+                }
+            }
+            if(member.roles.includes('708361495209181195')){ //T3++
+                if(!(buttCrewMember.roles.includes('689249934742126763') || buttCrewMember.roles.includes('278298980134420480') || buttCrewMember.roles.includes('278299105468350464'))){
+                    member.removeRole('708361495209181195')
+                }
+            }
+
+            // add roles
+            if(buttCrewMember.roles.includes('311705462754246656') || buttCrewMember.roles.includes('689249934742126610')){
+                member.addRole('708361296541777951')
+            }
+            if(buttCrewMember.roles.includes('689249934742126715')){
+                member.addRole('708361402229719079')
+            }
+            if(buttCrewMember.roles.includes('689249934742126763') || buttCrewMember.roles.includes('278298980134420480') || buttCrewMember.roles.includes('278299105468350464')){
+                member.addRole('708361495209181195')
+            }
+        }
+    })
 }
 
 client.on('guildMemberAdd', member => {
