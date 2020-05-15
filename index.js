@@ -84,32 +84,47 @@ let updateRoles = () => {
         let buttCrewMember = buttCrewServer.members.get(member.id)
 
         if(buttCrewMember){
+
+            let buttCrewRoles = []
+
+            buttCrewMember.roles.forEach(role => {
+                buttCrewRoles = [...buttCrewRoles, role.id]
+            })
             // remove roles
-            if(member.roles.includes('708361296541777951')){ //T1
-                if(!(buttCrewMember.roles.includes('311705462754246656') || buttCrewMember.roles.includes('689249934742126610'))){
+            if(member.roles.hasOwnProperty('708361296541777951')){ //T1
+                if(!(buttCrewRoles.includes('311705462754246656') || buttCrewRoles.includes('689249934742126610'))){
                     member.removeRole('708361296541777951')
+                    //console.log(`${member.displayName} removed from role: T1`)
                 }
             }
-            if(member.roles.includes('708361402229719079')){ //T2
-                if(!buttCrewMember.roles.includes('689249934742126715')){
+            if(member.roles.hasOwnProperty('708361402229719079')){ //T2
+                if(!buttCrewRoles.includes('689249934742126715')){
                     member.removeRole('708361402229719079')
+                    //console.log(`${member.displayName} removed from role: T2`)
                 }
             }
-            if(member.roles.includes('708361495209181195')){ //T3++
-                if(!(buttCrewMember.roles.includes('689249934742126763') || buttCrewMember.roles.includes('278298980134420480') || buttCrewMember.roles.includes('278299105468350464'))){
+            if(member.roles.hasOwnProperty('708361495209181195')){ //T3++
+                if(!(buttCrewRoles.includes('689249934742126763') || buttCrewRoles.includes('278298980134420480') || buttCrewRoles.includes('278299105468350464'))){
                     member.removeRole('708361495209181195')
+                    //console.log(`${member.displayName} removed from role: T3`)
                 }
             }
 
             // add roles
-            if(buttCrewMember.roles.includes('311705462754246656') || buttCrewMember.roles.includes('689249934742126610')){
+            if((buttCrewRoles.includes('311705462754246656') || buttCrewRoles.includes('689249934742126610'))
+                && !member.roles.has('708361296541777951')){
                 member.addRole('708361296541777951')
+                //console.log(`${member.displayName} added role: T1`)
             }
-            if(buttCrewMember.roles.includes('689249934742126715')){
+            if(buttCrewRoles.includes('689249934742126715')
+                && !member.roles.has('708361402229719079')){
                 member.addRole('708361402229719079')
+                //console.log(`${member.displayName} added role: T2`)
             }
-            if(buttCrewMember.roles.includes('689249934742126763') || buttCrewMember.roles.includes('278298980134420480') || buttCrewMember.roles.includes('278299105468350464')){
+            if((buttCrewRoles.includes('689249934742126763') || buttCrewRoles.includes('278298980134420480') || buttCrewRoles.includes('278299105468350464'))
+                && !member.roles.has('708361495209181195')){
                 member.addRole('708361495209181195')
+                //console.log(`${member.displayName} added role: T3`)
             }
         }
     })
