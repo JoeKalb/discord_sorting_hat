@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const client = new Discord.Client({ disableEveryone: false });
 const dotenv = require('dotenv').config();
 
 const CLIENT_ID = process.env.CLIENT_ID
@@ -9,6 +9,10 @@ const URL = 'https://discordapp.com/api/oauth2/authorize?client_id=6625067581025
 const permissions = process.env.PERMISSIONS
 
 const TOKEN = process.env.TOKEN
+
+const moment = require('moment');
+const bday = require('./birthday')
+
 client.once('ready', () => {
     console.log('Ready!');
 
@@ -48,6 +52,26 @@ client.on('message', async message => {
     }else if(message.author.id === '91370189366530048' && message.content === '!updateRoles'){
         updateRoles()
         message.channel.send('Roles Updated!')
+    }else if(message.content.match(/!set [a-zA-Z\s\d]+/g)){
+        let dateString = message.content.substring(5)
+        let date 
+
+        if(dateString.match(/[a-zA-Z]{3} [\d]{1,2}/g))
+            date = moment(dateString, "MMM DD")
+        else if(dateString.match(/[a-zA-Z]{5,} [\d]{1,2}/g))
+            date = moment(dateString, "MMMM DD")
+        else if(dateString.match(/[\d]{2}[\s|\S][\d]{2}/g))
+            date = moment(dateString, "MM DD")
+        else if(dateString.match(/[\d]{1,2} [a-zA-Z]{3}/g))
+            date = moment(dateString, "DD MMM")
+        else if(dateString.match(/[\d]{1,2} [a-zA-Z]{5,}/g))
+            date = moment(dateString, "DD MMMM")
+
+        if(date === undefined || !date.isValid())
+            message.reply(`I couldn't figure out the date ${dateString}. Please use the format MM/DD`)
+        else if(date.isValid()){
+            message.reply(bday.setBirthday(message.author.username, date))
+        }
     }
 
     try{
@@ -56,7 +80,7 @@ client.on('message', async message => {
     
             let buttMemberRoles = isInButtCrew(id)
             if(buttMemberRoles.length){
-                console.log(buttMemberRoles)
+                //console.log(buttMemberRoles)
                 if(buttMemberRoles.includes('311705462754246656') || buttMemberRoles.includes('689249934742126610')){ // Twitch Subscriber || SD: Tier 1 Sub
                     message.member.addRole('708361296541777951') // T1 Butt Sub
                 }
@@ -215,9 +239,9 @@ let isInButtCrew = (id) => {
         if(guild.id === '160072797475962881'){
             guild.members.forEach(member => {
                 if(member.id === id){
-                    console.log('found')
+                    //console.log('found')
                     member.roles.forEach(role => {
-                        console.log(`${role.name}: ${role.id}`)
+                        //console.log(`${role.name}: ${role.id}`)
                         roleIDs = [...roleIDs, role.id]
                     })
                 }
