@@ -14,8 +14,9 @@ const moment = require('moment');
 const bday = require('./birthday')
 
 const schedule = require('node-schedule');
-const checkBday = schedule.scheduleJob({hour: 07, minute: 30, dayOfWeek: 0}, function(){
-    client.channels.find('id','137074521940164608').send('It is now 7:30AM!')
+const checkBday = schedule.scheduleJob({hour: 9, minute: 52}, () => {
+    const channel = client.channels.get('137074521940164608')
+    channel.send('It is now 9:52AM!')
 });
 
 client.once('ready', () => {
@@ -75,11 +76,11 @@ client.on('message', async message => {
         if(date === undefined || !date.isValid())
             message.reply(`I couldn't figure out the date ${dateString}. Please use the format MM/DD`)
         else if(date.isValid()){
-            message.reply(bday.setBirthday(message.author.username, date))
+            message.channel.send(bday.setBirthday(message.author.id, date))
         }
     }
 
-    try{
+    /* try{
         if(message.channel.type !== 'dm' && message.member.guild.id === '137074521940164608'){ // temp sub nights
             const { id } = message.member
     
@@ -87,22 +88,22 @@ client.on('message', async message => {
             if(buttMemberRoles.length){
                 //console.log(buttMemberRoles)
                 if(buttMemberRoles.includes('311705462754246656') || buttMemberRoles.includes('689249934742126610')){ // Twitch Subscriber || SD: Tier 1 Sub
-                    message.member.addRole('708361296541777951') // T1 Butt Sub
+                    message.member.addRole('708361296541777951').catch(console.error) // T1 Butt Sub
                 }
                 if(buttMemberRoles.includes('689249934742126715')){ // HG: Tier 2 Sub
-                    message.member.addRole('708361402229719079') // T2 Butt Sub
+                    message.member.addRole('708361402229719079').catch(console.error) // T2 Butt Sub
                 }
                 if(buttMemberRoles.includes('689249934742126763') || buttMemberRoles.includes('278298980134420480') || buttMemberRoles.includes('278299105468350464')){
-                    message.member.addRole('708361495209181195') //T3++ Butt Sub
+                    message.member.addRole('708361495209181195').cache(console.error) //T3++ Butt Sub
                 }
                 if(buttMemberRoles.includes('264165174414540810') || buttMemberRoles.includes('264164239797649408')){ // God || Professors
-                    message.member.addRole('708395235134144524') // Essential Employees
+                    message.member.addRole('708395235134144524').cache(console.error) // Essential Employees
                 }
             }
         }
     }
     catch(err)
-    {console.log(err)}
+    {console.log(err)} */
     
 });
 let updateRoles = () => {
@@ -240,12 +241,12 @@ const HP_ROLE_IDS = [
 
 let isInButtCrew = (id) => {
     let roleIDs = []
-    client.guilds.forEach(guild => {
+    client.guilds.cache.forEach(guild => {
         if(guild.id === '160072797475962881'){
-            guild.members.forEach(member => {
+            guild.members.cache.forEach(member => {
                 if(member.id === id){
                     //console.log('found')
-                    member.roles.forEach(role => {
+                    member.roles.cache.forEach(role => {
                         //console.log(`${role.name}: ${role.id}`)
                         roleIDs = [...roleIDs, role.id]
                     })

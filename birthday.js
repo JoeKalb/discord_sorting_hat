@@ -1,11 +1,11 @@
 const moment = require('moment');
 
 module.exports = {
-    setBirthday: (username, birthday)=>{
+    setBirthday: (userID, birthday)=>{
         let daysTilBday = moment().to(birthday, true)
-        console.log(`username ${username}`)
+        console.log(`userID ${userID}`)
         console.log(`Month: ${birthday.month()+1}`)
         console.log(`Day: ${birthday.date()}`)
-        return `your birthday is ${birthday.format("MMMM DD")}. That's ${daysTilBday} away!`
+        return `<@${userID}> your birthday is ${birthday.format("MMMM DD")}. That's ${daysTilBday} away!`
     }
 }
