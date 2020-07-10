@@ -13,6 +13,11 @@ const TOKEN = process.env.TOKEN
 const moment = require('moment');
 const bday = require('./birthday')
 
+const schedule = require('node-schedule');
+const checkBday = schedule.scheduleJob({hour: 07, minute: 30, dayOfWeek: 0}, function(){
+    client.channels.find('id','137074521940164608').send('It is now 7:30AM!')
+});
+
 client.once('ready', () => {
     console.log('Ready!');
 
