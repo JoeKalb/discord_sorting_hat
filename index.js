@@ -184,15 +184,17 @@ client.on('guildMemberAdd', member => {
     }
 });
 
-client.on('messageReactionAdd', reaction => {
-    const {message, users, emoji} = reaction
+// adding people with the sorting hat
+client.on('messageReactionAdd', (reaction,user) => {
+    const {message, emoji} = reaction
+    console.log(message, user, emoji)
     if(message.channel.id === '662128396599558175' // change to #sorting_hat
     && message.guild.id === '160072797475962881' // change to thaButtCrew
-    && isMod(message.guild, users)){
+    && isMod(message.guild, user)){
         if(!hasHouse(message.member)){
             if(HP_EMOTE_ID_TO_ROLES.hasOwnProperty(emoji.id)){
                 
-                message.member.addRole(HP_EMOTE_ID_TO_ROLES[emoji.id].role_id)
+                message.member.roles.add(HP_EMOTE_ID_TO_ROLES[emoji.id].role_id)
                 .then(res => {
                     message.reply(`${HP_EMOTE_ID_TO_ROLES[emoji.id].name.toUpperCase()}!!!`)
                 }).catch(err => {
@@ -200,7 +202,7 @@ client.on('messageReactionAdd', reaction => {
                 })
             }
         }else{
-            if('356889743239413763' === emoji.id && isJoeFish(users)){
+            if('356889743239413763' === emoji.id && isJoeFish(user)){
                 let current_house_id;
                 message.member.roles.forEach(role => {
                     if(HP_ROLE_IDS.includes(role.id)){
@@ -257,17 +259,15 @@ let isInButtCrew = (id) => {
     return roleIDs
 }
 
-let isMod = (guild, users) => {
+let isMod = (guild, user) => {
     let result = false
 
-    guild.roles.forEach(role => {
+    guild.roles.cache.forEach(role => {
         if(role.id === '264164239797649408' || role.id === '264165174414540810'){ // change to mod or god id
             role.members.forEach(member => {
-                users.forEach(user => {
-                    if(member.id === user.id){
-                        result = true;
-                    }
-                })
+                if(member.id === user.id){
+                    result = true;
+                }
             })
         }
     })
@@ -278,7 +278,7 @@ let isMod = (guild, users) => {
 let hasHouse = (member) => {
     let result = false
 
-    member.roles.forEach(role => {
+    member.roles.cache.forEach(role => {
         if(HP_ROLE_IDS.includes(role.id)){
             result = true
         }
