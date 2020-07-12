@@ -51,7 +51,9 @@ client.login(TOKEN);
 
 
 client.on('message', async message => {
-    //console.log(message)
+    if(message.author.id === '662506758102581248') return //no more endless loops!
+    
+
 	if (message.content === '!ping') {
         // send back "Pong." to the channel the message was sent in
         message.channel.send('Pong.');
@@ -76,8 +78,10 @@ client.on('message', async message => {
         if(date === undefined || !date.isValid())
             message.reply(`I couldn't figure out the date ${dateString}. Please use the format MM/DD`)
         else if(date.isValid()){
-            message.channel.send(bday.setBirthday(message.author.id, date))
+            message.channel.send(await bday.addBirthday(message.author.id, date).catch(console.error))
         }
+    }else if(message.content.match(/!mybirthday/g)){
+        message.channel.send(await bday.getBirthday(message.author.id))
     }
 
     /* try{
