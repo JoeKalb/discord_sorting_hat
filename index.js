@@ -21,7 +21,7 @@ const checkBday = schedule.scheduleJob({hour: 9, minute: 52}, () => {
 
 client.once('ready', () => {
     console.log('Ready!');
-
+    client.user.setActivity('with 0s and 1s.', {type:'PLAYING'}).catch(console.error)
     
     // client.guilds.forEach(guild => {
     //     console.log(`${guild.name} guild id: ${guild.id}`)
@@ -164,7 +164,7 @@ let updateRoles = () => {
     })
 }
 
-client.on('guildMemberAdd', member => {
+/* client.on('guildMemberAdd', member => {
 
     if(member.guild.id === '137074521940164608'){ // temp sub nights
         const { id } = member
@@ -186,7 +186,7 @@ client.on('guildMemberAdd', member => {
             }
         }
     }
-});
+}); */
 
 // adding people with the sorting hat
 client.on('messageReactionAdd', (reaction,user) => {
