@@ -69,7 +69,9 @@ module.exports = {
     },
     getBirthday: async(discordID) => {
         const userBday = await getBirthday(discordID)
-        return `<@${discordID}>, your birthday is currently set to ${getMonthFromNumber(userBday.month)} ${userBday.day}${getDaySuffix(userBday.day)}. If this is incorrect try "!set MM/DD" to reset your birthday.`
+        return (userBday)
+            ?`<@${discordID}>, your birthday is currently set to ${getMonthFromNumber(userBday.month)} ${userBday.day}${getDaySuffix(userBday.day)}. If this is incorrect try "!set MM/DD" to reset your birthday.`
+            :`Sorry <@${discordID}>, it looks like you haven't added your birthday in yet. To add it type "!set MM/DD" to get your birthday added and announced!`
     }
 }
 

@@ -80,7 +80,7 @@ client.on('message', async message => {
         else if(date.isValid()){
             message.channel.send(await bday.addBirthday(message.author.id, date).catch(console.error))
         }
-    }else if(message.content.match(/!mybirthday/g)){
+    }else if(message.content.match(/!birthday/g)){
         message.channel.send(await bday.getBirthday(message.author.id))
     }
 
@@ -214,7 +214,7 @@ client.on('messageReactionAdd', (reaction,user) => {
                     }
                 })
 
-                message.member.removeRole(current_house_id)
+                message.member.roles.remove(current_house_id)
             }
         }
     }
