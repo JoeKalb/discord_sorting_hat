@@ -17,7 +17,7 @@ const giphy_api_key = process.env.GIPHY_API_KEY
 const giphy = require('giphy-api')(giphy_api_key)
 
 const schedule = require('node-schedule');
-const checkBday = schedule.scheduleJob({hour: 19, minute: 25}, async () => {
+const checkBday = schedule.scheduleJob({hour: 15, minute: 00}, async () => { // add +7 hours from PST to get proper AWS time scheudle
     const channel = client.channels.cache.get('137074521940164608')
     const now = moment.now()
 
