@@ -1,7 +1,8 @@
 const moment = require('moment');
 
 const mongoose = require('mongoose')
-const birthdayModel = require('./models/birthday.js')
+const birthdayModel = require('./models/birthday.js');
+const Birthday = require('./models/birthday.js');
 const dotenv = require('dotenv').config(); 
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_NAME}:${process.env.MONGO_PASS}@cluster0-sxqxp.mongodb.net/test?retryWrites=true&w=majority`,{
@@ -64,7 +65,6 @@ module.exports = {
             hasBday.updateOne({ month, day }).catch(console.error)
         }
         
-
         return `Thank you <@${discordID}> for setting your birthday to ${birthday.format("MMMM DD")}${getDaySuffix(birthday.date())}. That's ${daysTilBday} away!`
     },
     getBirthday: async(discordID) => {
@@ -72,7 +72,15 @@ module.exports = {
         return (userBday)
             ?`<@${discordID}>, your birthday is currently set to ${getMonthFromNumber(userBday.month)} ${userBday.day}${getDaySuffix(userBday.day)}. If this is incorrect try "!set MM/DD" to reset your birthday.`
             :`Sorry <@${discordID}>, it looks like you haven't added your birthday in yet. To add it type "!set MM/DD" to get your birthday added and announced!`
+    },
+    getTodaysBirthdays: async(month, day) => {
+        const birthdays = await Birthday.find({ month, day }).catch(console.error)
+        return birthdays
+    },
+    getMonth: (monthNum) => {
+        return getMonthFromNumber(monthNum)
+    },
+    getSuffix: (dayNum) => {
+        return getDaySuffix(dayNum)
     }
 }
-
-

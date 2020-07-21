@@ -14,9 +14,17 @@ const moment = require('moment');
 const bday = require('./birthday')
 
 const schedule = require('node-schedule');
-const checkBday = schedule.scheduleJob({hour: 9, minute: 52}, () => {
-    const channel = client.channels.get('137074521940164608')
-    channel.send('It is now 9:52AM!')
+const checkBday = schedule.scheduleJob({hour: 8, minute: 00}, () => {
+    const channel = client.channels.cache.get('137074521940164608')
+    const now = moment.now()
+    bday.getTodaysBirthdays(moment().month() + 1, moment().date()).then( res => {
+        if(res.length){
+            res.forEach(user => {
+                channel.send(`YOYOYO <@${user.discordID}> HAPPY BIRTHDAY!!!!`)
+            })
+        }
+    }).catch(err => console.log(err))
+    //channel.send(`Today is ${bday.getMonth(moment().month() + 1)} ${moment().date()}${bday.getSuffix(moment().date())}`)
 });
 
 client.once('ready', () => {
