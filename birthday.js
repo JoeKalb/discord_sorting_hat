@@ -82,5 +82,19 @@ module.exports = {
     },
     getSuffix: (dayNum) => {
         return getDaySuffix(dayNum)
+    },
+    randomBirthdayMessage: (name) => {
+        const messages = [
+            `WOOOO! Today is <name>'s birthday!`,
+            `Hold up, it's <name> birthday!`,
+            `OMG! <name> was born on this very day! HAPPY BIRTHDAY!`,
+            `Go <name>, it's ya birthday!`,
+            `Great Scott! The day that <name> was born is this very day!`,
+            `Did you know that <name>'s father invented the toaster strudel, also it's their birthday.`,
+            `Today is <name>'s birthday! That's some pretty cool beans.`,
+            `Happy Birthday <name>!!!`
+        ]
+
+        return messages[Math.floor(Math.random() * messages.length)].replace('<name>', name)
     }
 }
