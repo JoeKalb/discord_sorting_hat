@@ -11,10 +11,13 @@ const permissions = process.env.PERMISSIONS
 const TOKEN = process.env.TOKEN
 
 const moment = require('moment');
-const bday = require('./birthday')
+const bday = require('./birthday');
+
+const giphy_api_key = process.env.GIPHY_API_KEY
+const giphy = require('giphy-api')(giphy_api_key)
 
 const schedule = require('node-schedule');
-const checkBday = schedule.scheduleJob({hour: 8, minute: 00}, () => {
+const checkBday = schedule.scheduleJob({hour: 21, minute: 25}, () => {
     const channel = client.channels.cache.get('137074521940164608')
     const now = moment.now()
     bday.getTodaysBirthdays(moment().month() + 1, moment().date()).then( res => {
@@ -22,6 +25,11 @@ const checkBday = schedule.scheduleJob({hour: 8, minute: 00}, () => {
             res.forEach(user => {
                 channel.send(`YOYOYO <@${user.discordID}> HAPPY BIRTHDAY!!!!`)
             })
+
+            giphy.search('birthday').then(res => {
+                const randomGif = res.data[Math.floor(Math.random() * res.data.length)]
+                channel.send(randomGif.bitly_url)
+            }).catch(err => console.log(err))
         }
     }).catch(err => console.log(err))
     //channel.send(`Today is ${bday.getMonth(moment().month() + 1)} ${moment().date()}${bday.getSuffix(moment().date())}`)
