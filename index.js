@@ -17,7 +17,7 @@ const giphy_api_key = process.env.GIPHY_API_KEY
 const giphy = require('giphy-api')(giphy_api_key)
 
 const schedule = require('node-schedule');
-const checkBday = schedule.scheduleJob({hour: 21, minute: 25}, () => {
+const checkBday = schedule.scheduleJob({hour: 08, minute: 00}, () => {
     const channel = client.channels.cache.get('137074521940164608')
     const now = moment.now()
     bday.getTodaysBirthdays(moment().month() + 1, moment().date()).then( res => {
