@@ -22,7 +22,7 @@ const checkBday = schedule.scheduleJob({hour: 15, minute: 00}, async () => { // 
     const now = moment.now()
 
     const bdays = await bday.getTodaysBirthdays(moment().month() + 1, moment().date()).catch(console.error)
-    if(!bdays) return 
+    if(bdays.length === 0) return 
 
     bdays.forEach(user => {
         channel.send(bday.randomBirthdayMessage(`<@${user.discordID}>`))
