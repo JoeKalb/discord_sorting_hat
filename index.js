@@ -17,7 +17,7 @@ const giphy_api_key = process.env.GIPHY_API_KEY
 const giphy = require('giphy-api')(giphy_api_key)
 
 const schedule = require('node-schedule');
-const checkBday = schedule.scheduleJob({hour: 15, minute: 00}, async () => { // add +7 hours from PST to get proper AWS time scheudle
+const checkBday = schedule.scheduleJob({hour: 12, minute: 22}, async () => { // add +7 hours from PST to get proper AWS time scheudle
     const channel = client.channels.cache.get('137074521940164608')
     const now = moment.now()
 
@@ -28,7 +28,7 @@ const checkBday = schedule.scheduleJob({hour: 15, minute: 00}, async () => { // 
         channel.send(bday.randomBirthdayMessage(`<@${user.discordID}>`))
     })
 
-    const gifs = await giphy.search('birthday').catch(console.error)
+    const gifs = await giphy.search( {q:'birthday', limit:100}).catch(console.error)
     if(!gifs) return 
 
     const randomGif = gifs.data[Math.floor(Math.random() * gifs.data.length)]
@@ -38,29 +38,10 @@ const checkBday = schedule.scheduleJob({hour: 15, minute: 00}, async () => { // 
 client.once('ready', () => {
     console.log('Ready!');
     client.user.setActivity('with 0s and 1s.', {type:'PLAYING'}).catch(console.error)
-    
-    // client.guilds.forEach(guild => {
-    //     console.log(`${guild.name} guild id: ${guild.id}`)
-    //     console.log(`${guild.name} roles:`)
-    //     console.log(guild.roles.forEach(role => {
-    //         console.log(`\t${role.name}\t${role.id}`)
 
-    //         /* if(role.id === '264164239797649408'){
-    //             role.members.forEach(member => {
-    //                 console.log(`${member.displayName}: ${member.id}`)
-    //             })
-    //         } */
-    //     }))
-    //     /* console.log(`${guild.name} channels:`)
-    //     console.log(guild.channels.forEach(channel => {
-    //         console.log(`\t${channel.name}\t${channel.id}`)
-    //     }))
-    //     console.log(`${guild.name} emojis:`)
-    //     console.log(guild.emojis.forEach(emoji => {
-    //         console.log(`\t${emoji.name}\t${emoji.id}`)
-    //     })) */
-    // })
-    
+    client.guilds.cache.forEach(guild => {
+        console.log(guild.name, guild.id)
+    })
 });
 
 client.login(TOKEN);
@@ -69,14 +50,13 @@ client.login(TOKEN);
 client.on('message', async message => {
     if(message.author.id === '662506758102581248') return //no more endless loops!
     
-
 	if (message.content === '!ping') {
         // send back "Pong." to the channel the message was sent in
         message.channel.send('Pong.');
     }else if(message.author.id === '91370189366530048' && message.content === '!updateRoles'){
         updateRoles()
         message.channel.send('Roles Updated!')
-    }else if(message.content.match(/!set [a-zA-Z\s\d]+/g)){
+    }else if(message.content.match(/^!set [a-zA-Z\s\d]+/g)){
         let dateString = message.content.substring(5)
         let date 
 
@@ -99,33 +79,8 @@ client.on('message', async message => {
     }else if(message.content.match(/!birthday/g)){
         message.channel.send(await bday.getBirthday(message.author.id))
     }
-
-    /* try{
-        if(message.channel.type !== 'dm' && message.member.guild.id === '137074521940164608'){ // temp sub nights
-            const { id } = message.member
-    
-            let buttMemberRoles = isInButtCrew(id)
-            if(buttMemberRoles.length){
-                //console.log(buttMemberRoles)
-                if(buttMemberRoles.includes('311705462754246656') || buttMemberRoles.includes('689249934742126610')){ // Twitch Subscriber || SD: Tier 1 Sub
-                    message.member.addRole('708361296541777951').catch(console.error) // T1 Butt Sub
-                }
-                if(buttMemberRoles.includes('689249934742126715')){ // HG: Tier 2 Sub
-                    message.member.addRole('708361402229719079').catch(console.error) // T2 Butt Sub
-                }
-                if(buttMemberRoles.includes('689249934742126763') || buttMemberRoles.includes('278298980134420480') || buttMemberRoles.includes('278299105468350464')){
-                    message.member.addRole('708361495209181195').cache(console.error) //T3++ Butt Sub
-                }
-                if(buttMemberRoles.includes('264165174414540810') || buttMemberRoles.includes('264164239797649408')){ // God || Professors
-                    message.member.addRole('708395235134144524').cache(console.error) // Essential Employees
-                }
-            }
-        }
-    }
-    catch(err)
-    {console.log(err)} */
-    
 });
+
 let updateRoles = () => {
     let tempServer = client.guilds.get('137074521940164608')
     let buttCrewServer = client.guilds.get('160072797475962881')
@@ -180,34 +135,10 @@ let updateRoles = () => {
     })
 }
 
-/* client.on('guildMemberAdd', member => {
-
-    if(member.guild.id === '137074521940164608'){ // temp sub nights
-        const { id } = member
-
-        let buttMemberRoles = isInButtCrew(id)
-        if(buttMemberRoles.length){
-            console.log(buttMemberRoles)
-            if(buttMemberRoles.includes('311705462754246656') || buttMemberRoles.includes('689249934742126610')){ // Twitch Subscriber || SD: Tier 1 Sub
-                member.addRole('708361296541777951') // T1 Butt Sub
-            }
-            if(buttMemberRoles.includes('689249934742126715')){ // HG: Tier 2 Sub
-                member.addRole('708361402229719079') // T2 Butt Sub
-            }
-            if(buttMemberRoles.includes('689249934742126763') || buttMemberRoles.includes('278298980134420480') || buttMemberRoles.includes('278299105468350464')){
-                member.addRole('708361495209181195') //T3++ Butt Sub
-            }
-            if(buttMemberRoles.includes('264165174414540810') || buttMemberRoles.includes('264164239797649408')){ // God || Professors
-                member.addRole('708395235134144524') // Essential Employees
-            }
-        }
-    }
-}); */
-
 // adding people with the sorting hat
 client.on('messageReactionAdd', (reaction,user) => {
     const {message, emoji} = reaction
-    console.log(message, user, emoji)
+    //console.log(message, user, emoji)
     if(message.channel.id === '662128396599558175' // change to #sorting_hat
     && message.guild.id === '160072797475962881' // change to thaButtCrew
     && isMod(message.guild, user)){

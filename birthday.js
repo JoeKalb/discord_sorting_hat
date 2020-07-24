@@ -65,7 +65,7 @@ module.exports = {
             hasBday.updateOne({ month, day }).catch(console.error)
         }
         
-        return `Thank you <@${discordID}> for setting your birthday to ${birthday.format("MMMM DD")}${getDaySuffix(birthday.date())}. That's ${daysTilBday} away!`
+        return `Thank you <@${discordID}> for setting your birthday to ${birthday.format("MMMM DD")}${getDaySuffix(birthday.date())}!`
     },
     getBirthday: async(discordID) => {
         const userBday = await getBirthday(discordID)
@@ -86,13 +86,15 @@ module.exports = {
     randomBirthdayMessage: (name) => {
         const messages = [
             `WOOOO! Today is <name>'s birthday!`,
-            `Hold up, it's <name> birthday!`,
+            `Hold up, wait a minute, it's <name>'s birthday!`,
             `OMG! <name> was born on this very day! HAPPY BIRTHDAY!`,
             `Go <name>, it's ya birthday!`,
             `Great Scott! The day that <name> was born is this very day!`,
             `Did you know that <name>'s father invented the toaster strudel, also it's their birthday.`,
             `Today is <name>'s birthday! That's some pretty cool beans.`,
-            `Happy Birthday <name>!!!`
+            `Happy Birthday <name>!!!`,
+            `Happy happy birthday from all of us to you, we wish it was our birthday so we could party too. HEY! Happy Birthday <name>!!!`,
+            `There can only be one <name>, and today is their birthday.`
         ]
 
         return messages[Math.floor(Math.random() * messages.length)].replace('<name>', name)
