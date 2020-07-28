@@ -17,8 +17,13 @@ const giphy_api_key = process.env.GIPHY_API_KEY
 const giphy = require('giphy-api')(giphy_api_key)
 
 const schedule = require('node-schedule');
-const checkBday = schedule.scheduleJob({hour: 13, minute: 33}, async () => { // add +7 hours from PST to get proper AWS time scheudle
-    const channel = client.channels.cache.get('137074521940164608')
+const thaButtCrew = '160072797475962881'
+const subs_patrons = '307669416580218881'
+const secret_stuff_general = '137074521940164608'
+const checkBday = schedule.scheduleJob({hour: 15, minute: 00}, async () => { // add +7 hours from PST to get proper AWS time scheudle
+    if(!ready) return
+
+    const channel = client.channels.cache.get(secret_stuff_general)
     const now = moment.now()
 
     const bdays = await bday.getTodaysBirthdays(moment().month() + 1, moment().date()).catch(console.error)
@@ -35,13 +40,11 @@ const checkBday = schedule.scheduleJob({hour: 13, minute: 33}, async () => { // 
     channel.send(randomGif.bitly_url)
 });
 
+let ready = false
 client.once('ready', () => {
+    ready = true
     console.log('Ready!');
     client.user.setActivity('with 0s and 1s.', {type:'PLAYING'}).catch(console.error)
-
-    client.guilds.cache.forEach(guild => {
-        console.log(guild.name, guild.id)
-    })
 });
 
 client.login(TOKEN);
@@ -53,10 +56,11 @@ client.on('message', async message => {
 	if (message.content === '!ping') {
         // send back "Pong." to the channel the message was sent in
         message.channel.send('Pong.');
-    }else if(message.author.id === '91370189366530048' && message.content === '!updateRoles'){
-        updateRoles()
-        message.channel.send('Roles Updated!')
-    }else if(message.content.match(/^!set [a-zA-Z\s\d]+/g)){
+    }
+    
+    if(message.channel.id !== secret_stuff_general) return
+
+    if(message.content.match(/^!set [a-zA-Z\s\d]+/g)){
         let dateString = message.content.substring(5)
         let date 
 
@@ -76,64 +80,17 @@ client.on('message', async message => {
         else if(date.isValid()){
             message.channel.send(await bday.addBirthday(message.author.id, date).catch(console.error))
         }
-    }else if(message.content.match(/!birthday/g)){
+    }else if(message.content.match(/^!birthday/g)){
         message.channel.send(await bday.getBirthday(message.author.id))
+    }else if(message.content.match(/^!commands/g)){
+        const commandsEmbed = new Discord.MessageEmbed()
+            .setColor('#d74561')
+            .setTitle('List of Sorting Hat Commands')
+            .addField('!birthday', 'Show the birthday you currently have.')
+            .addField('!set MM/DD', 'Set your birthday so it can be announced!')
+        message.channel.send(commandsEmbed)
     }
 });
-
-let updateRoles = () => {
-    let tempServer = client.guilds.get('137074521940164608')
-    let buttCrewServer = client.guilds.get('160072797475962881')
-
-    tempServer.members.forEach(member => {
-        let buttCrewMember = buttCrewServer.members.get(member.id)
-
-        if(buttCrewMember){
-
-            let buttCrewRoles = []
-
-            buttCrewMember.roles.forEach(role => {
-                buttCrewRoles = [...buttCrewRoles, role.id]
-            })
-            // remove roles
-            if(member.roles.hasOwnProperty('708361296541777951')){ //T1
-                if(!(buttCrewRoles.includes('311705462754246656') || buttCrewRoles.includes('689249934742126610'))){
-                    member.removeRole('708361296541777951')
-                    //console.log(`${member.displayName} removed from role: T1`)
-                }
-            }
-            if(member.roles.hasOwnProperty('708361402229719079')){ //T2
-                if(!buttCrewRoles.includes('689249934742126715')){
-                    member.removeRole('708361402229719079')
-                    //console.log(`${member.displayName} removed from role: T2`)
-                }
-            }
-            if(member.roles.hasOwnProperty('708361495209181195')){ //T3++
-                if(!(buttCrewRoles.includes('689249934742126763') || buttCrewRoles.includes('278298980134420480') || buttCrewRoles.includes('278299105468350464'))){
-                    member.removeRole('708361495209181195')
-                    //console.log(`${member.displayName} removed from role: T3`)
-                }
-            }
-
-            // add roles
-            if((buttCrewRoles.includes('311705462754246656') || buttCrewRoles.includes('689249934742126610'))
-                && !member.roles.has('708361296541777951')){
-                member.addRole('708361296541777951')
-                //console.log(`${member.displayName} added role: T1`)
-            }
-            if(buttCrewRoles.includes('689249934742126715')
-                && !member.roles.has('708361402229719079')){
-                member.addRole('708361402229719079')
-                //console.log(`${member.displayName} added role: T2`)
-            }
-            if((buttCrewRoles.includes('689249934742126763') || buttCrewRoles.includes('278298980134420480') || buttCrewRoles.includes('278299105468350464'))
-                && !member.roles.has('708361495209181195')){
-                member.addRole('708361495209181195')
-                //console.log(`${member.displayName} added role: T3`)
-            }
-        }
-    })
-}
 
 // adding people with the sorting hat
 client.on('messageReactionAdd', (reaction,user) => {
