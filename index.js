@@ -20,7 +20,7 @@ const schedule = require('node-schedule');
 const thaButtCrew = '160072797475962881'
 const subs_patrons = '307669416580218881'
 const secret_stuff_general = '137074521940164608'
-const checkBday = schedule.scheduleJob({hour: 15, minute: 00}, async () => { // add +7 hours from PST to get proper AWS time scheudle
+const checkBday = schedule.scheduleJob({hour: 08, minute: 00}, async () => { // add +7 hours from PST to get proper AWS time scheudle
     if(!ready) return
 
     const channel = client.channels.cache.get(secret_stuff_general)
@@ -49,9 +49,9 @@ client.once('ready', () => {
 
 client.login(TOKEN);
 
-
+const BOT_ID = '662506758102581248'
 client.on('message', async message => {
-    if(message.author.id === '662506758102581248') return //no more endless loops!
+    if(message.author.id === BOT_ID) return //no more endless loops!
     
 	if (message.content === '!ping') {
         // send back "Pong." to the channel the message was sent in
@@ -148,24 +148,6 @@ const HP_ROLE_IDS = [
     '528264234233233409',
     '528264390080987146',
     '528264636894806027'] // change to just HP role id's
-
-let isInButtCrew = (id) => {
-    let roleIDs = []
-    client.guilds.cache.forEach(guild => {
-        if(guild.id === '160072797475962881'){
-            guild.members.cache.forEach(member => {
-                if(member.id === id){
-                    //console.log('found')
-                    member.roles.cache.forEach(role => {
-                        //console.log(`${role.name}: ${role.id}`)
-                        roleIDs = [...roleIDs, role.id]
-                    })
-                }
-            })
-        }
-    })
-    return roleIDs
-}
 
 let isMod = (guild, user) => {
     let result = false
