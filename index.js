@@ -21,24 +21,32 @@ const thaButtCrew = '160072797475962881'
 const subs_patrons = '307669416580218881'
 const secret_stuff_general = '137074521940164608'
 const checkBday = schedule.scheduleJob({hour: 08, minute: 00}, async () => { // add +7 hours from PST to get proper AWS time scheudle
+    bdayAnnouncments()
+});
+
+const bdayAnnouncments = async () => {
     if(!ready) return
 
     const channel = client.channels.cache.get(secret_stuff_general)
-    const now = moment.now()
 
     const bdays = await bday.getTodaysBirthdays(moment().month() + 1, moment().date()).catch(console.error)
     if(bdays.length === 0) return 
 
+    let atleastOne = false
     bdays.forEach(user => {
-        channel.send(bday.randomBirthdayMessage(`<@${user.discordID}>`))
+        if(channel.members.get(user.discordID)){
+            channel.send(bday.randomBirthdayMessage(`<@${user.discordID}>`))
+            atleastOne = true
+        }
     })
 
+    if(!atleastOne) return
     const gifs = await giphy.search( {q:'birthday', limit:100}).catch(console.error)
     if(!gifs) return 
 
     const randomGif = gifs.data[Math.floor(Math.random() * gifs.data.length)]
     channel.send(randomGif.bitly_url)
-});
+}
 
 let ready = false
 client.once('ready', () => {
@@ -79,6 +87,14 @@ client.on('message', async message => {
             message.reply(`I couldn't figure out the date ${dateString}. Please use the format MM/DD`)
         else if(date.isValid()){
             message.channel.send(await bday.addBirthday(message.author.id, date).catch(console.error))
+            if(moment().month() + 1 === date.month() + 1 && moment().date() === date.date()){
+                message.reply('your birthday is today?!? HAPPY BIRTHDAY!')
+                const gifs = await giphy.search( {q:'birthday', limit:100}).catch(console.error)
+                if(!gifs) return 
+
+                const randomGif = gifs.data[Math.floor(Math.random() * gifs.data.length)]
+                message.channel.send(randomGif.bitly_url)
+            }
         }
     }else if(message.content.match(/^!birthday/g)){
         message.channel.send(await bday.getBirthday(message.author.id))
