@@ -101,7 +101,7 @@ client.on('message', async message => {
     }else if(message.content.match(/^!commands/g)){
         const commandsEmbed = new Discord.MessageEmbed()
             .setColor('#d74561')
-            .setTitle('List of Sorting Hat Commands')
+            .setTitle('Command List')
             .addField('!birthday', 'Show the birthday you currently have.')
             .addField('!set MM/DD', 'Set your birthday so it can be announced!')
         message.channel.send(commandsEmbed)
