@@ -27,7 +27,7 @@ const checkBday = schedule.scheduleJob({hour: 08, minute: 00}, async () => { // 
 const bdayAnnouncments = async () => {
     if(!ready) return
 
-    const channel = client.channels.cache.get(secret_stuff_general)
+    const channel = client.channels.cache.get(subs_patrons)
 
     const bdays = await bday.getTodaysBirthdays(moment().month() + 1, moment().date()).catch(console.error)
     if(bdays.length === 0) return 
@@ -66,7 +66,7 @@ client.on('message', async message => {
         message.channel.send('Pong.');
     }
     
-    if(message.channel.id !== secret_stuff_general) return
+    if(message.channel.id !== subs_patrons) return
 
     if(message.content.match(/^!set [a-zA-Z\s\d]+/g)){
         let dateString = message.content.substring(5)
