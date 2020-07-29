@@ -34,15 +34,12 @@ const bdayAnnouncments = async () => {
     const bdays = await bday.getTodaysBirthdays(moment().month() + 1, moment().date()).catch(console.error)
     if(bdays.length === 0) return 
 
-    let atleastOne = false
     bdays.forEach(user => {
         if(sub_channel.members.get(user.discordID)){
             announcment_channel.send(bday.randomBirthdayMessage(`<@${user.discordID}>`))
-            atleastOne = true
         }
     })
 
-    if(!atleastOne) return
     const gifs = await giphy.search( {q:'birthday', limit:100}).catch(console.error)
     if(!gifs) return 
 
