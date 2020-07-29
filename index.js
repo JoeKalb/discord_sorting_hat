@@ -20,6 +20,7 @@ const schedule = require('node-schedule');
 const thaButtCrew = '160072797475962881'
 const subs_patrons = '307669416580218881'
 const secret_stuff_general = '137074521940164608'
+const general_everyone = '160072797475962881'
 const checkBday = schedule.scheduleJob({hour: 08, minute: 00}, async () => { // add +7 hours from PST to get proper AWS time scheudle
     bdayAnnouncments()
 });
@@ -27,15 +28,16 @@ const checkBday = schedule.scheduleJob({hour: 08, minute: 00}, async () => { // 
 const bdayAnnouncments = async () => {
     if(!ready) return
 
-    const channel = client.channels.cache.get(subs_patrons)
+    const announcment_channel = client.channels.cache.get(general_everyone)
+    const sub_channel = client.channels.cache.get(subs_patrons)
 
     const bdays = await bday.getTodaysBirthdays(moment().month() + 1, moment().date()).catch(console.error)
     if(bdays.length === 0) return 
 
     let atleastOne = false
     bdays.forEach(user => {
-        if(channel.members.get(user.discordID)){
-            channel.send(bday.randomBirthdayMessage(`<@${user.discordID}>`))
+        if(sub_channel.members.get(user.discordID)){
+            announcment_channel.send(bday.randomBirthdayMessage(`<@${user.discordID}>`))
             atleastOne = true
         }
     })
@@ -45,7 +47,7 @@ const bdayAnnouncments = async () => {
     if(!gifs) return 
 
     const randomGif = gifs.data[Math.floor(Math.random() * gifs.data.length)]
-    channel.send(randomGif.bitly_url)
+    announcment_channel.send(randomGif.bitly_url)
 }
 
 let ready = false

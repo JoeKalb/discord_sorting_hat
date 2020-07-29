@@ -38,6 +38,10 @@ const getDaySuffix = (day) => {
         case 1: return 'st'
         case 2: return 'nd'
         case 3: return 'rd'
+        case 21: return 'st'
+        case 22: return 'nd'
+        case 23: return 'rd'
+        case 31: return 'st'
         default: return 'th'
     }
 }
@@ -97,6 +101,6 @@ module.exports = {
             `There can only be one <name>, and today is their birthday.`
         ]
 
-        return messages[Math.floor(Math.random() * messages.length)].replace('<name>', name)
+        return `@here, ${messages[Math.floor(Math.random() * messages.length)].replace('<name>', name)}`
     }
 }
