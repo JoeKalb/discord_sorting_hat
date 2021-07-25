@@ -30,24 +30,29 @@ const bdayAnnouncments = async () => {
 
     const announcment_channel = client.channels.cache.get(general_everyone)
     const sub_channel = client.channels.cache.get(subs_patrons)
+    sub_channel.permissionOverwrites.forEach(p => console.log(p.id))
 
     const bdays = await bday.getTodaysBirthdays(moment().month() + 1, moment().date()).catch(console.error)
+    //console.log(bdays)
     if(bdays.length === 0) return 
 
-    let hasSubBirthdays = false
-    bdays.forEach(user => {
-        if(sub_channel.members.get(user.discordID)){
-            hasSubBirthdays = true
-            announcment_channel.send(bday.randomBirthdayMessage(`<@${user.discordID}>`))
-        }
-    })
-
-    if(!hasSubBirthdays) return
     const gifs = await giphy.search( {q:'birthday', limit:100}).catch(console.error)
     if(!gifs) return 
 
     const randomGif = gifs.data[Math.floor(Math.random() * gifs.data.length)]
-    announcment_channel.send(randomGif.bitly_url)
+
+    let hasSubBirthdays = false
+    bdays.forEach(user => {
+        console.log(user)
+        if(sub_channel.members.get(user.discordID)){
+            hasSubBirthdays = true
+            console.log(user.discordID)
+            //announcment_channel.send(bday.randomBirthdayMessage(`<@${user.discordID}>`))
+        }
+    })
+
+    if(!hasSubBirthdays) return
+    //announcment_channel.send(randomGif.bitly_url)
 }
 
 let ready = false
@@ -55,6 +60,7 @@ client.once('ready', () => {
     ready = true
     console.log('Ready!');
     client.user.setActivity('with 0s and 1s.', {type:'PLAYING'}).catch(console.error)
+    bdayAnnouncments()
 });
 
 client.login(TOKEN);
