@@ -51,17 +51,12 @@ const bdayAnnouncments = async () => {
         }
     })
 
-<<<<<<< HEAD
-    if(!hasSubBirthdays) return
-    //announcment_channel.send(randomGif.bitly_url)
-=======
     const gifs = await giphy.search( {q:'birthday', limit:100}).catch(console.error)
     if(!gifs) return 
 
     const randomGif = gifs.data[Math.floor(Math.random() * gifs.data.length)]
     if(hasSubBirthdays)
         announcment_channel.send(randomGif.bitly_url)
->>>>>>> 3d87a8813f323c82ba4cae96b86654e4d7e0b4ae
 }
 
 let ready = false
