@@ -36,27 +36,29 @@ const bdayAnnouncments = async () => {
     //console.log(bdays)
     if(bdays.length === 0) return 
 
-    const gifs = await giphy.search( {q:'birthday', limit:100}).catch(console.error)
-    if(!gifs) return 
+    const isBdayToday = await bdayLoop(bdays)
 
-    const randomGif = gifs.data[Math.floor(Math.random() * gifs.data.length)]
+    if(isBdayToday){
+        const gifs = await giphy.search( {q:'birthday', limit:100}).catch(console.error)
+        if(!gifs) return 
 
-    let hasSubBirthdays = false
-    bdays.forEach(user => {
-        console.log(user)
-        if(sub_channel.members.get(user.discordID)){
-            hasSubBirthdays = true
-            console.log(user.discordID)
-            //announcment_channel.send(bday.randomBirthdayMessage(`<@${user.discordID}>`))
-        }
-    })
-
-    const gifs = await giphy.search( {q:'birthday', limit:100}).catch(console.error)
-    if(!gifs) return 
-
-    const randomGif = gifs.data[Math.floor(Math.random() * gifs.data.length)]
-    if(hasSubBirthdays)
+        const randomGif = gifs.data[Math.floor(Math.random() * gifs.data.length)]
         announcment_channel.send(randomGif.bitly_url)
+    }
+}
+
+let bdayLoop = async (bdayList) => {
+
+    return new Promise((resolve, reject) => {
+        let result = false
+        bdayList.forEach(user => {
+            if(sub_channel.members.get(user.discordID)){
+                result = true
+                announcment_channel.send(bday.randomBirthdayMessage(`<A${user.discordID}>`))
+            }
+        })
+        resolve(result)
+    })
 }
 
 let ready = false
